@@ -1,0 +1,13 @@
+[
+	{
+		"id": 1,
+		"title": "producto1",
+		"description": "descripcion del producto 1",
+		"price": 2000,
+		"status": true,
+		"category": "producto",
+		"thumbnail": [],
+		"code": "abc123",
+		"stock": 10
+	}
+]
