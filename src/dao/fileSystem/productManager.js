@@ -1,6 +1,6 @@
 import fs from "fs";
 
-const path = "./src/data/products.json"; //base de datos de productos
+const path = "./data/products.json"; //base de datos de productos
 let products = []
 
 

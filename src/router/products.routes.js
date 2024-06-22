@@ -1,57 +1,57 @@
 import { Router } from "express";
-import productManager from "../productManager.js";
 import { checkProductData } from "../middlewares/checkProductData.middleware.js";
+import productDao from "../dao/mongoDB/product.dao.js";
 
 const router = Router();
 
 
 router.get("/", async (req, res) => {
     try {
-        const { limit } = req.query;
-        const products = await productManager.getProducts(limit);
+        // const { limit } = req.query;
+        const products = await productDao.getAll();
 
         res.status(200).json({ status: "Success", products});
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({status: "Error", mensaje: "Error del servidor..."});
+        res.status(500).json({ status: "Error", mensaje: "Error del servidor..." });
     }
 })
 
 router.get("/:pid", async (req, res) => {
     try {
         const { pid } = req.params;
-        const product = await productManager.getProductById(Number(pid));
+        const product = await productDao.getById(pid)
 
-        if(!product) return res.status(404).json({status: "Error", mensaje: "Producto ingresado no encontrado"});
+        if(!product) return res.status(404).json({ status: "Error", mensaje: "Producto ingresado no encontrado" });
 
         res.status(200).json({ status: "Success", product});
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({status: "Error", mensaje: "Error del servidor..."});
+        res.status(500).json({ status: "Error", mensaje: "Error del servidor..." });
     }
 })
 
 
 router.post("/", checkProductData, async (req, res) => {
     try {
-        const body = req.body;
-        const products = await productManager.addProduct(body);
+        const productData = req.body;
+        const product = await productDao.createItem(productData);
 
-        res.status(201).json({ status: "Success", products }); //status 201: se ha creado un producto
+        res.status(201).json({ status: "Success", product }); //status 201: se ha creado un producto
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({status: "Error", mensaje: "Error del servidor..."});
+        res.status(500).json({ status: "Error", mensaje: "Error del servidor..." });
     }
 })
 
 router.put("/:pid", async (req, res) => {
     try {
         const { pid } = req.params;
-        const body = req.body;
-        const product = await productManager.updateProduct(Number(pid), body);
+        const productData = req.body;
+        const product = await productDao.updateItem(pid, productData)
 
         if(!product) return res.status(404).json({status: "Error", mensaje: "Producto ingresado no encontrado"});
 
@@ -59,7 +59,7 @@ router.put("/:pid", async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({status: "Error", mensaje: "Error del servidor..."});
+        res.status(500).json({ status: "Error", mensaje: "Error del servidor..." });
     }
 })
 
@@ -67,7 +67,7 @@ router.put("/:pid", async (req, res) => {
 router.delete("/:pid", async (req, res) => {
     try {
         const { pid } = req.params;
-        const product = await productManager.deleteProduct(Number(pid));
+        const product = await productDao.deleteItem(pid)
 
         if(!product) return res.status(404).json({status: "Error", mensaje: "Producto ingresado no encontrado"});
 
@@ -75,7 +75,7 @@ router.delete("/:pid", async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({status: "Error", mensaje: "Error del servidor..."});
+        res.status(500).json({ status: "Error", mensaje: "Error del servidor..." });
     }
 })
 

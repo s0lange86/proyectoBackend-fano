@@ -6,10 +6,15 @@ import handlebars from "express-handlebars";
 import viewRoutes from "./router/views.routes.js"
 
 import { Server } from "socket.io";
-import productManager from "./productManager.js";
+import productDao from "./dao/mongoDB/product.dao.js";
+import { connectMongoDB } from "./config/mongoDB.config.js";
+
 
 const PORT = 8080;
 const app = express();
+
+//MongoDB
+connectMongoDB();
 
 //Middlewares:
 app.use(express.json());
@@ -37,6 +42,6 @@ export const io = new Server(httpServer)
 // 3) "handshake":
 io.on("connection", async (socket) => {
     console.log("Nuevo cliente conectado");
-    const products = await productManager.getProducts();
+    const products = await productDao.getAll();
     io.emit("products", products)
 })

@@ -1,6 +1,6 @@
 import fs from "fs";
 
-const path = "./src/data/carts.json";
+const path = "./data/carts.json";
 
 let carts = [];
 

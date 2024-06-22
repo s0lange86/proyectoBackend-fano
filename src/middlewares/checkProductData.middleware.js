@@ -1,5 +1,6 @@
 import { request, response } from "express";
-import productManager from "../productManager.js";
+import productDao from "../dao/mongoDB/product.dao.js";
+
 
 export const checkProductData = async (req = request,  res = response, next) => {
     try {
@@ -14,7 +15,7 @@ export const checkProductData = async (req = request,  res = response, next) => 
             category
         };
 
-        const products = await productManager.getProducts();
+        const products = await productDao.getAll();
 
         //VALIDACIONES:
         //verificamos que el code no se repita con uno ya existente
